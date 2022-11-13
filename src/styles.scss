@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "../node_modules/@picocss/pico/css/pico.min.css";
+
+* {
+    color: #ddd;
+}
+
+body {
+    margin: 0 auto;
+    max-width: 95%;
+
+    line-height: 1.5;
+    padding: 4em 1em;
+
+    background-color: var(--background-color)
+}

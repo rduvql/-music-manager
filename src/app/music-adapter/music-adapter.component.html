@@ -1,0 +1,39 @@
+<div class="wrapper">
+    <div *ngIf="entry" class="entry-wrapper">
+
+        <span class="buttons-wrapper">
+            <button (click)="doRename()"> rename </button>
+            <button (click)="spotifySearch()"> spotify </button>
+        </span>
+
+        <span class="image-wrapper">
+            <img #cover_img loading="lazy" src="{{ base64CovertArt }}" alt>
+        </span>
+
+        <span class="attributes-wrapper">
+            <input #filename id="filename" name="filename" type="text" [value]="entry.filename" (keyup.enter)="updateFilename(filename.value)">
+
+            <div class="tags">
+                <input #title id="title" name="title" type="text" [value]="entry.title" (keyup.enter)="updateTags({title: title.value})">
+                <input #artist id="artist" name="artist" type="text" [value]="entry.artist" (keyup.enter)="updateTags({artist: artist.value})">
+            </div>
+        </span>
+    </div>
+
+    <div *ngIf="spotifyResult" class="spotify-wrapper">
+
+        <div *ngFor="let item of spotifyResult.tracks.items">
+            <span class="text">
+                <a [href]="html_get_spotify_music_href(item)" target="_blank">
+                    {{ html_get_song_name(item) }}
+                </a>
+            </span>
+            <span class="image">
+                <img [src]="html_get_spotify_album_covert_url(item)" alt="" (click)="fetchImageToBase64(html_get_spotify_album_covert_url(item))">
+            </span>
+            <span class="audio">
+                <audio controls [src]="html_get_spotify_preview_url(item)"></audio>
+            </span>
+        </div>
+    </div>
+</div>

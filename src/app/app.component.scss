@@ -1,0 +1,42 @@
+.active {
+    background-color: var(--primary);
+}
+
+#layout {
+    display: flex;
+    flex-direction: row;
+
+    #left-pane {
+        width: 15%;
+
+        ul {
+            li {
+                border: 2px solid #11191f;
+                padding: 2px 8px;
+                margin-bottom: 0;
+
+                &:hover {
+                    border: 2px solid var(--primary);
+                    border-radius: 5px;
+                }
+            }
+        }
+    }
+
+    #main {
+        width: 70%;
+        padding-left: 2em;
+    }
+
+    #right-pane {
+        width: 15%;
+    }
+
+}
+
+ul {
+    li {
+        list-style: none;
+        font-size: 0.7em;
+    }
+}

@@ -1,0 +1,86 @@
+.wrapper {
+    border: 1px solid #173a54;
+}
+
+.entry-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+
+    &:hover {
+        .buttons-wrapper {
+            visibility: visible !important;
+        }
+    }
+
+    // 
+    .buttons-wrapper {
+
+        visibility: hidden;
+
+        button {
+            margin: 0.1em !important;
+            padding: 0 !important;
+            font-size: 1em !important;
+        }
+    }
+
+    // 
+    .image-wrapper {
+
+        img {
+            position: relative;
+            max-height: 8em;
+
+            height: auto;
+            width: auto;
+        }
+    }
+
+    // 
+    .attributes-wrapper {
+        margin-left: 1em;
+        width: 90%;
+
+        input {
+            padding: 0;
+            margin: 2px 0;
+            padding: 16px;
+            border: none;
+            height: 1em;
+            font-size: 1.1em;
+        }
+
+        .tags {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 1em;
+        }
+    }
+}
+
+.spotify-wrapper {
+
+    margin-left: 128px;
+
+    div {
+        display: grid;
+        grid-template-columns: 8fr 1fr 1fr;
+        align-items: center;
+
+        span {
+            margin: 1px 0px;
+        }
+    }
+
+    img {
+        max-height: 50px;
+    }
+
+    audio {
+        height: 40px;
+    }
+}
+
