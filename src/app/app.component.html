@@ -1,8 +1,12 @@
 <div id="layout">
 
     <div id="left-pane">
+        <span (click)="doBuildIndex()">
+            SYNC ALL
+        </span>
+        <input #input type="text" (keydown.enter)="doQueryIndex(input.value)">
         <ul>
-            <li *ngFor="let dir of directories" (click)="fetchDirMp3s(dir)" [ngClass]="dir === selectedDir ? 'active' : '' ">
+            <li *ngFor="let dir of directories" (click)="fetchDirMp3s(dir)" [ngClass]="dir === selectedDir ? 'active' : ''">
                 <span>
                     {{ dir }}
                 </span>
@@ -12,11 +16,20 @@
 
     <div id="main">
 
+        <!-- LOCAL MP3 LISTING -->
         <div>
-            <ul>
+            <ul *ngIf="entries">
                 <li *ngFor="let entry of entries">
-                    <!-- <app-music-adapter [entry]="entry" [directory]="selectedDir"></app-music-adapter> -->
                     <app-music-adapter [entry]="entry"></app-music-adapter>
+                </li>
+            </ul>
+        </div>
+
+        <!-- SPOTIFY PLAYLIST LISTING -->
+        <div>
+            <ul *ngIf="spotifyEntries">
+                <li *ngFor="let entry of spotifyEntries">
+                    <app-spotify-adapter [entry]="entry"></app-spotify-adapter>
                 </li>
             </ul>
         </div>
@@ -24,8 +37,8 @@
     </div>
 
     <div id="right-pane">
-        <ul>
-            <li *ngFor="let playlist of spotifyPlaylists">
+        <ul *ngIf="spotifyEntries">
+            <li *ngFor="let playlist of spotifyPlaylists" (click)="loadSpotifyPlaylist(playlist)" [ngClass]="playlist.name === selectedSpotifyPlaylist ? 'active' : ''">
                 {{ playlist.name }}
             </li>
         </ul>

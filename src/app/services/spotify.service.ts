@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.env';
 import { SpotifyPlaylistResp } from './responses/spotify.playlist.resp';
+import { SpotifyPlaylistTracksResp } from './responses/spotify.playlistTracks.resp';
 import { SpotifySearchResponse } from './responses/spotify.search.resp';
 import { SpotifyTokenResponse } from './responses/spotify.token.resp';
+
+const SPOTIFY_URL = "https://api.spotify.com"
 
 const SPOTIFY_USER_ID = environment.spotify.userId;
 const SPOTIFY_CLIENT_ID = environment.spotify.clientId;
@@ -30,14 +33,14 @@ export class SpotifyService {
             ["type", "track"],
             ["limit", 5]
         ]
-            .map(e => e.join("="))
+            .map(param => param.join("="))
             .join("&")
 
         console.log(`[spotifySearchTrack] params:`, params)
 
         return fetch(`https://api.spotify.com/v1/search?${params}`, {
             headers: {
-                'Authorization': `Bearer ${this.token}`,
+                "Authorization": `Bearer ${this.token}`,
                 "Content-Type": "application/json"
             },
             method: "GET"
@@ -51,7 +54,7 @@ export class SpotifyService {
     /**
      * playlists needs to be public (edit in spotify profile)
      */
-    async fetchUserPlaylists() {
+    async fetchUserPlaylists(): Promise<SpotifyPlaylistResp> {
 
         await this.fetchToken()
 
@@ -67,6 +70,27 @@ export class SpotifyService {
                 return resp
             })
     }
+
+    /**
+     *
+     */
+    async fetchPlaylistTrack(playlistId: string): Promise<SpotifyPlaylistTracksResp> {
+
+        await this.fetchToken()
+
+        return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+            headers: {
+                'Authorization': `Bearer ${this.token}`,
+                "Content-Type": "application/json"
+            },
+            method: "GET"
+        })
+            .then(resp => resp.json())
+            .then((resp: SpotifyPlaylistTracksResp) => {
+                return resp
+            })
+    }
+
 
     /**
      *

@@ -15,7 +15,6 @@ pub static EXTENSIONS: [&'static str; 1] = [".mp3"];
 /**
  *
  */
-// fn list_dir_internal(path: impl AsRef<Path>) -> Result<Vec<String>, Box<dyn Error>> {
 pub fn list_dirs(path: &PathBuf) -> Result<Vec<String>, Box<dyn Error>> {
     let mut out = vec![];
     for e in fs::read_dir(path)? {
@@ -59,12 +58,19 @@ pub fn list_dir_mp3s(parent_path: &PathBuf) -> Result<Vec<MusicFileEntry>, Box<d
                     artist: None,
                 };
 
-                let tag = Tag::read_from_path(path)?;
-                if let Some(title) = tag.title() {
-                    music.title = Some(title.into());
-                }
-                if let Some(artist) = tag.artist() {
-                    music.artist = Some(artist.into())
+                match Tag::read_from_path(path) {
+                    Ok(tag) => {
+                        if let Some(title) = tag.title() {
+                            music.title = Some(title.into());
+                        }
+                        if let Some(artist) = tag.artist() {
+                            music.artist = Some(artist.into())
+                        }
+                    }
+                    Err(e) => {
+                        println!("Error reading tag of {}", path.to_str().unwrap());
+                        println!("{e}");
+                    }
                 }
 
                 out.push(music);

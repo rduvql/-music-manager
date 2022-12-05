@@ -67,12 +67,18 @@
 
     div {
         display: grid;
-        grid-template-columns: 8fr 1fr 1fr;
+        grid-template-columns: 8fr 1fr 1fr 1fr;
         align-items: center;
 
         span {
             margin: 1px 0px;
         }
+    }
+
+    button {
+        margin: 0.1em !important;
+        padding: 0 !important;
+        font-size: 1em !important;
     }
 
     img {

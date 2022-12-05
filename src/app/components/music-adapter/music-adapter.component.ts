@@ -1,9 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-// import { invoke } from '@tauri-apps/api';
-import { MusicFileEntry } from '../app.component';
-import { SpotifySearchResponse, SpotifyTrackItem } from '../services/responses/spotify.search.resp';
-import { SpotifyService } from '../services/spotify.service';
-import { TauriService } from '../services/tauri.service';
+import { MusicFileEntry } from '../../app.component';
+import { SpotifySearchResponse, SpotifyTrackItem } from '../../services/responses/spotify.search.resp';
+import { SpotifyService } from '../../services/spotify.service';
+import { TauriService } from '../../services/tauri.service';
 
 @Component({
     selector: 'app-music-adapter',
@@ -63,13 +62,7 @@ export class MusicAdapterComponent implements OnInit, AfterViewInit {
     /**
      *
      */
-    async doRename() {
-    }
-
-    /**
-     *
-     */
-    async updateFilename(newFileName: string) {
+    async updateFilenameFromInput(newFileName: string) {
 
         let [, title, artist] = /(.*) ~ (.*)\..*/.exec(newFileName) || ["", "", ""];
 
@@ -87,19 +80,40 @@ export class MusicAdapterComponent implements OnInit, AfterViewInit {
     /**
      *
      */
-    async updateTags(tags: { title?: string, artist?: string }) {
+    async updateTagsFromInput(tags: { title?: string, artists?: string }) {
 
         let title = tags.title || this.entry?.title
-        let artist = tags.artist || this.entry?.artist
+        let artists = tags.artists || this.entry?.artist
 
-        let filename = `${title} ~ ${artist}.mp3`
+        let filename = `${title} ~ ${artists}.mp3`
 
         let updatedEntry: MusicFileEntry = {
             path: `${this.entry?.directory}/${filename}`,
             filename: filename,
             directory: this.entry?.directory as string,
             title: title,
-            artist: artist
+            artist: artists
+        }
+
+        this.updateFilenameAngTags(updatedEntry)
+    }
+
+    /**
+     * 
+     */
+    async updateFilenameAndTagsFromSpotify(entry: SpotifyTrackItem) {
+
+        let title = entry.name
+        let artists = entry.artists.map(a => a.name).join("; ")
+
+        let filename = `${title} ~ ${artists}.mp3`
+
+        let updatedEntry: MusicFileEntry = {
+            path: `${this.entry?.directory}/${filename}`,
+            filename: filename,
+            directory: this.entry?.directory as string,
+            title: title,
+            artist: artists
         }
 
         this.updateFilenameAngTags(updatedEntry)

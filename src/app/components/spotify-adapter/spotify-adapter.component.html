@@ -1,0 +1,41 @@
+<div class="wrapper">
+    <div *ngIf="entry" class="entry-wrapper">
+
+        <span class="buttons-wrapper">
+            <button (click)="deezerSearch()"> deezer </button>
+        </span>
+
+        <span class="image-wrapper">
+            <img #cover_img loading="lazy" src="{{ html_get_spotify_image_url() }}" alt>
+        </span>
+
+        <span class="attributes-wrapper">
+            <div class="tags">
+                <i *ngIf="alreadyOwned" class="green-dot"></i>
+                <a [href]="html_get_spotify_track_url()" target="_blank">
+                    {{ html_get_spotify_title() }}
+                </a>
+            </div>
+
+            <audio controls [src]="html_get_spotify_preview_url()"></audio>
+        </span>
+    </div>
+
+    <!-- DEEZER results -->
+    <div *ngIf="deezerResults" class="spotify-wrapper">
+
+        <div *ngFor="let item of deezerResults">
+            <span class="text">
+                <a [href]="html_get_deezer_href_to_mymp3(item)" target="_blank" referrerpolicy="no-referrer">
+                    {{ html_get_deezer_name(item) }}
+                </a>
+            </span>
+            <span class="image">
+                <img [src]="html_get_deezer_album_cover_url(item)" alt="">
+            </span>
+            <!-- <span class="audio">
+                <audio controls [src]="html_get_spotify_preview_url(item)"></audio>
+            </span> -->
+        </div>
+    </div>
+</div>

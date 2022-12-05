@@ -12,7 +12,15 @@
     },
     "tauri": {
         "allowlist": {
-            "all": true
+            "all": true,
+            "http": {
+                "all": true,
+                "request": true,
+                "scope": [
+                    "https://api.deezer.com/*",
+                    "https://api/spotify.com/*"
+                ]
+            }
         },
         "bundle": {
             "active": true,
@@ -48,7 +56,7 @@
             }
         },
         "security": {
-            "csp": null
+            "csp": "default-src 'self' api.spotify.com api.deezer.com; object-src 'none';"
         },
         "updater": {
             "active": false

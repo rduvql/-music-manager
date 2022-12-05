@@ -69,3 +69,5 @@ dist-ssr
 *.sw?
 
 src/environments/environment.env.ts
+
+index_dir/

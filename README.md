@@ -2,7 +2,7 @@
 
 application manage music tags and filename
 
-use tauri as backend and angular as frontend
+built wiuth tauri as backend and angular as frontend
 
 spotify integration to fetch cover art
 

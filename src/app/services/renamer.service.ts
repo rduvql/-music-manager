@@ -29,36 +29,42 @@ const POST_CLEAN_REPLACE: [string, string][] = [
     ["w&w", "W&W"]
 ]
 
-function replacerizer(str: string, arr: [string | RegExp, string?]) {
-    let pattern = typeof arr[0] === "string" ? new RegExp(arr[0], "gi") : arr[0];
-    let replace = (arr[1] || "");
-    return str.replace(pattern, replace);
-}
+export namespace RN_FUNCS {
 
-function sanitizer(str: string, replacements = DEFAULT_REPLACE) {
-    replacements.forEach(replacement => str = replacerizer(str, replacement))
-    return str.trim();
-}
-
-function artistTitleSwapper(str: string) {
-    let [artist, name] = str.split(" - ");
-
-    if (artist && name) {
-        return `${name} ~ ${artist}`;
+    function replacerizer(str: string, arr: [string | RegExp, string?]) {
+        let pattern = typeof arr[0] === "string" ? new RegExp(arr[0], "gi") : arr[0];
+        let replace = (arr[1] || "");
+        return str.replace(pattern, replace);
     }
-    return str;
+
+    export function sanitize(replacements = DEFAULT_REPLACE) {
+        return (str: string): string => {
+            replacements.forEach(replacement => str = replacerizer(str, replacement))
+            return str.trim();
+        }
+    }
+
+    export function swap(str: string) {
+        let [artist, name] = str.split(" - ");
+
+        if (artist && name) {
+            return `${name} ~ ${artist}`;
+        }
+        return str;
+    }
+
+    export function capitalize(str: string) {
+        return str
+            .toLowerCase()
+            .split(' ')
+            .map((s) => {
+                let i = s.indexOf('(') + 1;
+                return s.substring(0, i) + s.charAt(i).toUpperCase() + s.substring(i + 1)
+            })
+            .join(' ');
+    }
 }
 
-function capitalizer(str: string) {
-    return str
-        .toLowerCase()
-        .split(' ')
-        .map((s) => {
-            let i = s.indexOf('(') + 1;
-            return s.substring(0, i) + s.charAt(i).toUpperCase() + s.substring(i + 1)
-        })
-        .join(' ');
-}
 
 @Injectable({
     providedIn: 'root'
@@ -67,13 +73,11 @@ export class RenamerService {
 
     constructor() {}
 
-    rename(str: string) {
-
-        let sanitized = sanitizer(str)
-        let swapped = artistTitleSwapper(sanitized)
-        let capitalized = capitalizer(swapped)
-        POST_CLEAN_REPLACE.forEach(artistFix => capitalized = replacerizer(capitalized, artistFix));
-
-        return capitalized;
+    rename(init: string, ...funcs: ((str: string) => string)[]) {
+        let ret = init;
+        funcs.forEach(f => {
+            ret = f(ret)
+        })
+        return ret
     }
 }
